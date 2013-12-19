@@ -8,4 +8,25 @@
     secure-root-prefix = "md";
     platform-name = "Apple Generic ARM Platform";
     device_type = "bootrom";
+
+    chosen {
+        memory-map {
+            MemoryMapReserved-0 = <0x0 0x0>;
+            MemoryMapReserved-1 = <0x0 0x0>;
+            MemoryMapReserved-2 = <0x0 0x0>;
+            MemoryMapReserved-3 = <0x0 0x0>;
+            MemoryMapReserved-4 = <0x0 0x0>;
+            MemoryMapReserved-5 = <0x0 0x0>;
+            MemoryMapReserved-6 = <0x0 0x0>;
+            MemoryMapReserved-7 = <0x0 0x0>;
+            MemoryMapReserved-8 = <0x0 0x0>;
+            MemoryMapReserved-9 = <0x0 0x0>;
+            MemoryMapReserved-10 = <0x0 0x0>;
+            MemoryMapReserved-11 = <0x0 0x0>;
+            MemoryMapReserved-12 = <0x0 0x0>;
+            MemoryMapReserved-13 = <0x0 0x0>;
+            MemoryMapReserved-14 = <0x0 0x0>;
+            MemoryMapReserved-15 = <0x0 0x0>;
+        };
+    };
 };
