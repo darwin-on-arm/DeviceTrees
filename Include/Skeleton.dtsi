@@ -7,4 +7,5 @@
 / {
     secure-root-prefix = "md";
     platform-name = "Apple Generic ARM Platform";
+    device_type = "bootrom";
 };
