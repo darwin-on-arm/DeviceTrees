@@ -9,7 +9,46 @@
     platform-name = "Apple Generic ARM Platform";
     device_type = "bootrom";
 
+    mlb-serial-number = <0x0 0x0 0x0 0x0>;
+    region-info = <0x0 0x0 0x0 0x0>;
+    firmware-min-capacity = <0x0 0x0 0x0 0x0>;
+    model-number = <0x0 0x0 0x0 0x0>;
+    serial-number = <0x0 0x0 0x0 0x0>;
+    config-number = <0x0 0x0 0x0 0x0>;
+
     chosen {
+        /*
+         * Other stuff. (iBoot fills these out automatically.)
+         */
+        die-id = <0x0 0x0>;
+        unique-chip-id = <0x0 0x0>;
+
+        dram-vendor = <0x0 0x0 0x0 0x0>;
+        firmware-version = <0x0 0x0 0x0 0x0>;
+        root-ticket-hash = <0x0 0x0 0x0 0x0>;
+
+        software-behavior = <0x0 0x0 0x0 0x0>;
+
+        production-cert = <0x1>;
+        development-cert = <0x1>;
+
+        display-scale = <0x1>;
+        display-rotation = <0x0>;
+
+        software-bundle-version = <0x0>;
+        secure-boot = <0x1>;
+
+        board-id = <0x0>;
+        chip-id = <0x8900>;
+
+        gid-aes-key = <0x0>;
+        uid-aes-key = <0x0>;
+
+        debug-enabled = <0x1>;
+
+        /*
+         * iBoot renames these to the proper entries.
+         */
         memory-map {
             MemoryMapReserved-0 = <0x0 0x0>;
             MemoryMapReserved-1 = <0x0 0x0>;
