@@ -1,0 +1,10 @@
+/*
+ * Skeleton dtsi.
+ */
+
+/dts-v1/;
+
+/ {
+    secure-root-prefix = "md";
+    platform-name = "Apple Generic ARM Platform";
+};

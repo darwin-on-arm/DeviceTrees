@@ -2,7 +2,7 @@
  * ARM RealView PB-A8 DeviceTree.
  */
 
-/dts-v1/;
+#include "Skeleton.dtsi"
 
 / {
     compatible = "arm,realview-pb-a8", "AppleARM";
@@ -98,6 +98,5 @@
             #size-cells = <1>;
             ranges = <0 0x10000000 0x10000>;
         };
-
     };
 };
