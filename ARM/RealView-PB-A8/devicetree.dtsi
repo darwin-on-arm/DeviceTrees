@@ -1,0 +1,103 @@
+/*
+ * ARM RealView PB-A8 DeviceTree.
+ */
+
+/dts-v1/;
+
+/ {
+    compatible = "arm,realview-pb-a8", "AppleARM";
+    model = "ARM RealView Platform Baseboard for Cortex-A8";
+    #address-cells = <1>;
+    #size-cells = <1>;
+    interrupt-parent = <&intc>;
+
+    /*
+     * CPU nodes. (Cortex-A8)
+     */
+    cpus {
+        #address-cells = <1>;
+        #size-cells = <0>;
+        cpu0 {
+            device_type = "cpu";
+            compatible = "ARM,v7", "ARM,cortex-a8";
+            reg = <0>;
+        };
+    };
+
+    /*
+     * ARM IO bus.
+     */
+    arm-io {
+        device_type = "arm-io";
+        compatible = "arm-io,arm-pba8";
+
+        intc: interrupt-controller {
+            compatible = "arm,realview-gic", "arm,primecell";
+            device_type = "interrupt-controller";
+            interrupt-controller;
+            reg = <0x1e000000 0x1000>;
+        };
+
+        /*
+         * System UARTs
+         */
+        uart0 {
+            compatible = "arm,pl011", "arm,primecell";
+            device_type = "uart";
+            reg = <0x10009000 0x1000>;
+            baud-rate = <115200>;
+        }; 
+
+        /*
+         * System timers.
+         */
+        timer0 {
+            compatible = "arm,sp804", "arm,primecell";
+            device_type = "timer";
+            reg = <0x10011000 0x1000>;
+            clock-frequency = <32768>;
+        };
+
+        /*
+         * Display controller.
+         */
+        lcd-controller {
+            device_type = "lcd-controller";
+            compatible = "arm,pl110", "arm,primecell";
+            reg = <0x10020000 0x1000>;
+        };
+
+        lcd-panel {
+            device_type = "lcd-panel";
+            compatible = "lcd,generic";
+        };
+
+        /*
+         * Misc devices.
+         */
+        sctl {
+            compatible = "arm,sysctl";
+            reg = <0x10001000 0x1000>;
+        };
+
+        gpio0 {
+            device_type = "gpio";
+            compatible = "arm,pl061", "arm,primecell";
+            reg = <0x10013000 0x1000>;
+            gpio-controller;
+            #gpio-cells = <2>;
+            interrupt-controller;
+            #interrupt-cells = <2>;
+        };
+
+        /*
+         * CoreTile FPGA.
+         */        
+        coretile-fpga {
+            #address-cells = <1>;
+            #size-cells = <1>;
+            ranges = <0 0x10000000 0x10000>;
+        };
+
+    };
+};
