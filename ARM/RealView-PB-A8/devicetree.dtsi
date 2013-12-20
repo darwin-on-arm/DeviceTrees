@@ -30,7 +30,9 @@
     arm-io {
         device_type = "arm-io";
         compatible = "arm-io,arm-pba8";
-
+        #address-cells = <1>;
+        #size-cells = <1>;
+        
         intc: interrupt-controller {
             compatible = "arm,realview-gic", "arm,primecell";
             device_type = "interrupt-controller";
