@@ -1,0 +1,615 @@
+/*
+ * Omap3 Device Tree.
+ *
+ * Based on the Linux one.
+ */
+
+/ {
+    compatible = "ti-omap3", "AppleARM";
+    #address-cells = <1>;
+    #size-cells = <1>;
+    interrupt-parent = <&intc>;	
+
+    /*
+     * CPU nodes. (Cortex-A8)
+     */
+    cpus {
+        #address-cells = <1>;
+        #size-cells = <0>;
+        cpu0 {
+            device_type = "cpu";
+            compatible = "ARM,v7", "ARM,cortex-a8";
+            reg = <0>;
+        };
+    };
+    
+    /*
+     * The soc node represents the soc top level view. It is used for IPs
+     * that are not memory mapped in the MPU view or for the MPU itself.
+     */
+    soc {
+        compatible = "ti,omap-infra";
+        mpu {
+            compatible = "ti,omap3-mpu";
+            ti,hwmods = "mpu";
+        };
+
+        iva {
+            compatible = "ti,iva2.2";
+            ti,hwmods = "iva";
+
+            dsp {
+                compatible = "ti,omap3-c64";
+            };
+        };
+    };
+
+    /*
+     * Power management unit.
+     */
+    pmu {
+        compatible = "ARM,cortex-a8-pmu";
+        reg = <0x54000000 0x800000>;
+        AAPL,interrupts = <3>;
+    };
+
+    /*
+     * ARM IO bus.
+     */
+    arm-io {
+        device_type = "arm-io";
+        compatible = "arm-io,omap3";
+        #address-cells = <1>;
+        #size-cells = <1>;
+        ti,hwmods = "l3_main";
+
+        aes: aes {
+            compatible = "ti,omap3-aes";
+            ti,hwmods = "aes";
+            reg = <0x480c5000 0x50>;
+            AAPL,interrupts = <0>;
+        };
+
+        counter32k: counter {
+            compatible = "ti,omap-counter32k";
+            reg = <0x48320000 0x20>;
+            ti,hwmods = "counter_32k";
+        };
+
+        intc: interrupt-controller {
+            compatible = "ti,omap2-intc";
+            interrupt-controller;
+            #interrupt-cells = <1>;
+            ti,intc-size = <96>;
+            reg = <0x48200000 0x1000>;
+        };
+
+        sdma: dma-controller {
+            compatible = "ti,omap3630-sdma", "ti,omap3430-sdma";
+            reg = <0x48056000 0x1000>;
+            AAPL,interrupts = <12>,
+                     <13>,
+                     <14>,
+                     <15>;
+            #dma-cells = <1>;
+            #dma-channels = <32>;
+            #dma-requests = <96>;
+        };
+
+        omap3_pmx_core: pinmux_core {
+            compatible = "ti,omap3-padconf", "pinctrl-single";
+            reg = <0x48002030 0x05cc>;
+            #address-cells = <1>;
+            #size-cells = <0>;
+            #interrupt-cells = <1>;
+            interrupt-controller;
+            pinctrl-single,register-width = <16>;
+            pinctrl-single,function-mask = <0xff1f>;
+        };
+
+        omap3_pmx_wkup: pinmux_wakeup {
+            compatible = "ti,omap3-padconf", "pinctrl-single";
+            reg = <0x48002a00 0x5c>;
+            #address-cells = <1>;
+            #size-cells = <0>;
+            #interrupt-cells = <1>;
+            interrupt-controller;
+            pinctrl-single,register-width = <16>;
+            pinctrl-single,function-mask = <0xff1f>;
+        };
+
+        gpio1: gpio1 {
+            compatible = "ti,omap3-gpio";
+            reg = <0x48310000 0x200>;
+            AAPL,interrupts = <29>;
+            ti,hwmods = "gpio1";
+            ti,gpio-always-on;
+            gpio-controller;
+            #gpio-cells = <2>;
+            interrupt-controller;
+            #interrupt-cells = <2>;
+        };
+
+        gpio2: gpio2 {
+            compatible = "ti,omap3-gpio";
+            reg = <0x49050000 0x200>;
+            AAPL,interrupts = <30>;
+            ti,hwmods = "gpio2";
+            gpio-controller;
+            #gpio-cells = <2>;
+            interrupt-controller;
+            #interrupt-cells = <2>;
+        };
+
+        gpio3: gpio3 {
+            compatible = "ti,omap3-gpio";
+            reg = <0x49052000 0x200>;
+            AAPL,interrupts = <31>;
+            ti,hwmods = "gpio3";
+            gpio-controller;
+            #gpio-cells = <2>;
+            interrupt-controller;
+            #interrupt-cells = <2>;
+        };
+
+        gpio4: gpio4 {
+            compatible = "ti,omap3-gpio";
+            reg = <0x49054000 0x200>;
+            AAPL,interrupts = <32>;
+            ti,hwmods = "gpio4";
+            gpio-controller;
+            #gpio-cells = <2>;
+            interrupt-controller;
+            #interrupt-cells = <2>;
+        };
+
+        gpio5: gpio5 {
+            compatible = "ti,omap3-gpio";
+            reg = <0x49056000 0x200>;
+            AAPL,interrupts = <33>;
+            ti,hwmods = "gpio5";
+            gpio-controller;
+            #gpio-cells = <2>;
+            interrupt-controller;
+            #interrupt-cells = <2>;
+        };
+
+        gpio6: gpio6 {
+            compatible = "ti,omap3-gpio";
+            reg = <0x49058000 0x200>;
+            AAPL,interrupts = <34>;
+            ti,hwmods = "gpio6";
+            gpio-controller;
+            #gpio-cells = <2>;
+            interrupt-controller;
+            #interrupt-cells = <2>;
+        };
+
+        uart1: serial0 {
+            compatible = "ti,omap3-uart";
+            reg = <0x4806a000 0x2000>;
+            AAPL,interrupts = <72>;
+            dmas = <&sdma 49 &sdma 50>;
+            dma-names = "tx", "rx";
+            ti,hwmods = "uart1";
+            clock-frequency = <48000000>;
+        };
+
+        uart2: serial1 {
+            compatible = "ti,omap3-uart";
+            reg = <0x4806c000 0x400>;
+            AAPL,interrupts = <73>;
+            dmas = <&sdma 51 &sdma 52>;
+            dma-names = "tx", "rx";
+            ti,hwmods = "uart2";
+            clock-frequency = <48000000>;
+        };
+
+        uart3: serial2 {
+            compatible = "ti,omap3-uart";
+            reg = <0x49020000 0x400>;
+            AAPL,interrupts = <74>;
+            dmas = <&sdma 53 &sdma 54>;
+            dma-names = "tx", "rx";
+            ti,hwmods = "uart3";
+            clock-frequency = <48000000>;
+        };
+
+        i2c1: i2c1 {
+            compatible = "ti,omap3-i2c";
+            reg = <0x48070000 0x80>;
+            AAPL,interrupts = <56>;
+            dmas = <&sdma 27 &sdma 28>;
+            dma-names = "tx", "rx";
+            #address-cells = <1>;
+            #size-cells = <0>;
+            ti,hwmods = "i2c1";
+        };
+
+        i2c2: i2c2 {
+            compatible = "ti,omap3-i2c";
+            reg = <0x48072000 0x80>;
+            AAPL,interrupts = <57>;
+            dmas = <&sdma 29 &sdma 30>;
+            dma-names = "tx", "rx";
+            #address-cells = <1>;
+            #size-cells = <0>;
+            ti,hwmods = "i2c2";
+        };
+
+        i2c3: i2c3 {
+            compatible = "ti,omap3-i2c";
+            reg = <0x48060000 0x80>;
+            AAPL,interrupts = <61>;
+            dmas = <&sdma 25 &sdma 26>;
+            dma-names = "tx", "rx";
+            #address-cells = <1>;
+            #size-cells = <0>;
+            ti,hwmods = "i2c3";
+        };
+
+        mailbox: mailbox {
+            compatible = "ti,omap3-mailbox";
+            ti,hwmods = "mailbox";
+            reg = <0x48094000 0x200>;
+            AAPL,interrupts = <26>;
+        };
+
+        mcspi1: spi1 {
+            compatible = "ti,omap2-mcspi";
+            reg = <0x48098000 0x100>;
+            AAPL,interrupts = <65>;
+            #address-cells = <1>;
+            #size-cells = <0>;
+            ti,hwmods = "mcspi1";
+            ti,spi-num-cs = <4>;
+            dmas = <&sdma 35>,
+                   <&sdma 36>,
+                   <&sdma 37>,
+                   <&sdma 38>,
+                   <&sdma 39>,
+                   <&sdma 40>,
+                   <&sdma 41>,
+                   <&sdma 42>;
+            dma-names = "tx0", "rx0", "tx1", "rx1",
+                    "tx2", "rx2", "tx3", "rx3";
+        };
+
+        mcspi2: spi2 {
+            compatible = "ti,omap2-mcspi";
+            reg = <0x4809a000 0x100>;
+            AAPL,interrupts = <66>;
+            #address-cells = <1>;
+            #size-cells = <0>;
+            ti,hwmods = "mcspi2";
+            ti,spi-num-cs = <2>;
+            dmas = <&sdma 43>,
+                   <&sdma 44>,
+                   <&sdma 45>,
+                   <&sdma 46>;
+            dma-names = "tx0", "rx0", "tx1", "rx1";
+        };
+
+        mcspi3: spi3 {
+            compatible = "ti,omap2-mcspi";
+            reg = <0x480b8000 0x100>;
+            AAPL,interrupts = <91>;
+            #address-cells = <1>;
+            #size-cells = <0>;
+            ti,hwmods = "mcspi3";
+            ti,spi-num-cs = <2>;
+            dmas = <&sdma 15>,
+                   <&sdma 16>,
+                   <&sdma 23>,
+                   <&sdma 24>;
+            dma-names = "tx0", "rx0", "tx1", "rx1";
+        };
+
+        mcspi4: spi4 {
+            compatible = "ti,omap2-mcspi";
+            reg = <0x480ba000 0x100>;
+            AAPL,interrupts = <48>;
+            #address-cells = <1>;
+            #size-cells = <0>;
+            ti,hwmods = "mcspi4";
+            ti,spi-num-cs = <1>;
+            dmas = <&sdma 70>, <&sdma 71>;
+            dma-names = "tx0", "rx0";
+        };
+
+        hdqw1w: 1w {
+            compatible = "ti,omap3-1w";
+            reg = <0x480b2000 0x1000>;
+            AAPL,interrupts = <58>;
+            ti,hwmods = "hdq1w";
+        };
+
+        mmc1: mmc1 {
+            compatible = "ti,omap3-hsmmc";
+            reg = <0x4809c000 0x200>;
+            AAPL,interrupts = <83>;
+            ti,hwmods = "mmc1";
+            ti,dual-volt;
+            dmas = <&sdma 61>, <&sdma 62>;
+            dma-names = "tx", "rx";
+        };
+
+        mmc2: mmc2 {
+            compatible = "ti,omap3-hsmmc";
+            reg = <0x480b4000 0x200>;
+            AAPL,interrupts = <86>;
+            ti,hwmods = "mmc2";
+            dmas = <&sdma 47>, <&sdma 48>;
+            dma-names = "tx", "rx";
+        };
+
+        mmc3: mmc3 {
+            compatible = "ti,omap3-hsmmc";
+            reg = <0x480ad000 0x200>;
+            AAPL,interrupts = <94>;
+            ti,hwmods = "mmc3";
+            dmas = <&sdma 77>, <&sdma 78>;
+            dma-names = "tx", "rx";
+        };
+
+        mmu_isp: mmu {
+            compatible = "ti,omap3-mmu-isp";
+            ti,hwmods = "mmu_isp";
+            reg = <0x480bd400 0x80>;
+            AAPL,interrupts = <8>;
+        };
+
+        wdt2: wdt {
+            compatible = "ti,omap3-wdt";
+            reg = <0x48314000 0x80>;
+            ti,hwmods = "wd_timer2";
+        };
+
+        mcbsp1: mcbsp1 {
+            compatible = "ti,omap3-mcbsp";
+            reg = <0x48074000 0xff>;
+            reg-names = "mpu";
+            AAPL,interrupts = <16>, /* OCP compliant interrupt */
+                     <59>, /* TX interrupt */
+                     <60>; /* RX interrupt */
+            interrupt-names = "common", "tx", "rx";
+            ti,buffer-size = <128>;
+            ti,hwmods = "mcbsp1";
+            dmas = <&sdma 31>,
+                   <&sdma 32>;
+            dma-names = "tx", "rx";
+        };
+
+        mcbsp2: mcbsp2 {
+            compatible = "ti,omap3-mcbsp";
+            reg = <0x49022000 0xff>,
+                  <0x49028000 0xff>;
+            reg-names = "mpu", "sidetone";
+            AAPL,interrupts = <17>, /* OCP compliant interrupt */
+                     <62>, /* TX interrupt */
+                     <63>, /* RX interrupt */
+                     <4>;  /* Sidetone */
+            interrupt-names = "common", "tx", "rx", "sidetone";
+            ti,buffer-size = <1280>;
+            ti,hwmods = "mcbsp2", "mcbsp2_sidetone";
+            dmas = <&sdma 33>,
+                   <&sdma 34>;
+            dma-names = "tx", "rx";
+        };
+
+        mcbsp3: mcbsp3 {
+            compatible = "ti,omap3-mcbsp";
+            reg = <0x49024000 0xff>,
+                  <0x4902a000 0xff>;
+            reg-names = "mpu", "sidetone";
+            AAPL,interrupts = <22>, /* OCP compliant interrupt */
+                     <89>, /* TX interrupt */
+                     <90>, /* RX interrupt */
+                     <5>;  /* Sidetone */
+            interrupt-names = "common", "tx", "rx", "sidetone";
+            ti,buffer-size = <128>;
+            ti,hwmods = "mcbsp3", "mcbsp3_sidetone";
+            dmas = <&sdma 17>,
+                   <&sdma 18>;
+            dma-names = "tx", "rx";
+        };
+
+        mcbsp4: mcbsp4 {
+            compatible = "ti,omap3-mcbsp";
+            reg = <0x49026000 0xff>;
+            reg-names = "mpu";
+            AAPL,interrupts = <23>, /* OCP compliant interrupt */
+                     <54>, /* TX interrupt */
+                     <55>; /* RX interrupt */
+            interrupt-names = "common", "tx", "rx";
+            ti,buffer-size = <128>;
+            ti,hwmods = "mcbsp4";
+            dmas = <&sdma 19>,
+                   <&sdma 20>;
+            dma-names = "tx", "rx";
+        };
+
+        mcbsp5: mcbsp5 {
+            compatible = "ti,omap3-mcbsp";
+            reg = <0x48096000 0xff>;
+            reg-names = "mpu";
+            AAPL,interrupts = <27>, /* OCP compliant interrupt */
+                     <81>, /* TX interrupt */
+                     <82>; /* RX interrupt */
+            interrupt-names = "common", "tx", "rx";
+            ti,buffer-size = <128>;
+            ti,hwmods = "mcbsp5";
+            dmas = <&sdma 21>,
+                   <&sdma 22>;
+            dma-names = "tx", "rx";
+        };
+
+        sham: sham {
+            compatible = "ti,omap3-sham";
+            ti,hwmods = "sham";
+            reg = <0x480c3000 0x64>;
+            AAPL,interrupts = <49>;
+        };
+
+        smartreflex_core: smartreflex_core {
+            compatible = "ti,omap3-smartreflex-core";
+            ti,hwmods = "smartreflex_core";
+            reg = <0x480cb000 0x400>;
+            AAPL,interrupts = <19>;
+        };
+
+        smartreflex_mpu_iva: smartreflex_mpu_iva {
+            compatible = "ti,omap3-smartreflex-iva";
+            ti,hwmods = "smartreflex_mpu_iva";
+            reg = <0x480c9000 0x400>;
+            AAPL,interrupts = <18>;
+        };
+
+        timer1: timer1 {
+            compatible = "ti,omap3430-timer";
+            reg = <0x48318000 0x400>;
+            AAPL,interrupts = <37>;
+            ti,hwmods = "timer1";
+            ti,timer-alwon;
+        };
+
+        timer2: timer2 {
+            compatible = "ti,omap3430-timer";
+            reg = <0x49032000 0x400>;
+            AAPL,interrupts = <38>;
+            ti,hwmods = "timer2";
+        };
+
+        timer3: timer3 {
+            compatible = "ti,omap3430-timer";
+            reg = <0x49034000 0x400>;
+            AAPL,interrupts = <39>;
+            ti,hwmods = "timer3";
+        };
+
+        timer4: timer4 {
+            compatible = "ti,omap3430-timer";
+            reg = <0x49036000 0x400>;
+            AAPL,interrupts = <40>;
+            ti,hwmods = "timer4";
+        };
+
+        timer5: timer5 {
+            compatible = "ti,omap3430-timer";
+            reg = <0x49038000 0x400>;
+            AAPL,interrupts = <41>;
+            ti,hwmods = "timer5";
+            ti,timer-dsp;
+        };
+
+        timer6: timer6 {
+            compatible = "ti,omap3430-timer";
+            reg = <0x4903a000 0x400>;
+            AAPL,interrupts = <42>;
+            ti,hwmods = "timer6";
+            ti,timer-dsp;
+        };
+
+        timer7: timer7 {
+            compatible = "ti,omap3430-timer";
+            reg = <0x4903c000 0x400>;
+            AAPL,interrupts = <43>;
+            ti,hwmods = "timer7";
+            ti,timer-dsp;
+        };
+
+        timer8: timer8 {
+            compatible = "ti,omap3430-timer";
+            reg = <0x4903e000 0x400>;
+            AAPL,interrupts = <44>;
+            ti,hwmods = "timer8";
+            ti,timer-pwm;
+            ti,timer-dsp;
+        };
+
+        timer9: timer9 {
+            compatible = "ti,omap3430-timer";
+            reg = <0x49040000 0x400>;
+            AAPL,interrupts = <45>;
+            ti,hwmods = "timer9";
+            ti,timer-pwm;
+        };
+
+        timer10: timer10 {
+            compatible = "ti,omap3430-timer";
+            reg = <0x48086000 0x400>;
+            AAPL,interrupts = <46>;
+            ti,hwmods = "timer10";
+            ti,timer-pwm;
+        };
+
+        timer11: timer11 {
+            compatible = "ti,omap3430-timer";
+            reg = <0x48088000 0x400>;
+            AAPL,interrupts = <47>;
+            ti,hwmods = "timer11";
+            ti,timer-pwm;
+        };
+
+        timer12: timer12 {
+            compatible = "ti,omap3430-timer";
+            reg = <0x48304000 0x400>;
+            AAPL,interrupts = <95>;
+            ti,hwmods = "timer12";
+            ti,timer-alwon;
+            ti,timer-secure;
+        };
+
+        usbhstll: usbhstll {
+            compatible = "ti,usbhs-tll";
+            reg = <0x48062000 0x1000>;
+            AAPL,interrupts = <78>;
+            ti,hwmods = "usb_tll_hs";
+        };
+
+        usbhshost: usbhshost {
+            compatible = "ti,usbhs-host";
+            reg = <0x48064000 0x400>;
+            ti,hwmods = "usb_host_hs";
+            #address-cells = <1>;
+            #size-cells = <1>;
+            ranges;
+
+            usbhsohci: ohci {
+                compatible = "ti,ohci-omap3", "usb-ohci";
+                reg = <0x48064400 0x400>;
+                interrupt-parent = <&intc>;
+                AAPL,interrupts = <76>;
+            };
+
+            usbhsehci: ehci {
+                compatible = "ti,ehci-omap", "usb-ehci";
+                reg = <0x48064800 0x400>;
+                interrupt-parent = <&intc>;
+                AAPL,interrupts = <77>;
+            };
+        };
+
+        gpmc: gpmc {
+            compatible = "ti,omap3430-gpmc";
+            ti,hwmods = "gpmc";
+            reg = <0x6e000000 0x02d0>;
+            AAPL,interrupts = <20>;
+            gpmc,num-cs = <8>;
+            gpmc,num-waitpins = <4>;
+            #address-cells = <2>;
+            #size-cells = <1>;
+        };
+
+        usb_otg_hs: usb_otg_hs {
+            compatible = "ti,omap3-musb";
+            reg = <0x480ab000 0x1000>;
+            AAPL,interrupts = <92>, <93>;
+            interrupt-names = "mc", "dma";
+            ti,hwmods = "usb_otg_hs";
+            multipoint = <1>;
+            num-eps = <16>;
+            ram-bits = <12>;
+        };
+    };
+};

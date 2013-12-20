@@ -1,7 +1,8 @@
 CPPFLAGS	= -E -P -nostdinc -IInclude -undef -x assembler-with-cpp
 CPP		= clang
 DTC		= dtc
-DEVICETREES	= RealView.devicetree Nokia_RX51.devicetree
+DEVICETREES	= RealView.devicetree Nokia_RX51.devicetree \
+	TI_BeagleXM.devicetree
 
 all: $(DEVICETREES)
 
@@ -11,6 +12,11 @@ RealView.devicetree: ARM/RealView-PB-A8/devicetree.dtsi
 	rm -f $@.p
 
 Nokia_RX51.devicetree: TexasInstruments/OMAP3/Nokia_RX51/devicetree.dtsi
+	$(CPP) $(CPPFLAGS) $< -o $@.p
+	$(DTC) -O dtb -o $@ $@.p
+	rm -f $@.p
+
+TI_BeagleXM.devicetree: TexasInstruments/OMAP3/BeagleBoardXM/devicetree.dtsi
 	$(CPP) $(CPPFLAGS) $< -o $@.p
 	$(DTC) -O dtb -o $@ $@.p
 	rm -f $@.p
